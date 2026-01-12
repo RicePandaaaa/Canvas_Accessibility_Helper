@@ -1,5 +1,5 @@
 # Allow user to input file name
-file_name = "pradip week 1 lecture video.vtt"
+file_name = input("Enter the file name: ")    
 
 # Open the file
 with open(file_name, 'r') as input_file:
@@ -30,12 +30,12 @@ with open(file_name, 'r') as input_file:
 
         # If ending punctuation is found, add the text to the end of the current sentence and add to the sentences list
         if text[-1] in sentence_punctuations:
-            current_sentence += text + "\n"
+            current_sentence += text + " "
             sentences.append(current_sentence)
             current_sentence = ""
         else:
             # Add the text with a space after for the next text
-            current_sentence += text + ""
+            current_sentence += text + " "
 
     # Create output file with sentences
     new_file_name = "converted_" + file_name.split('.')[0] + ".txt"
