@@ -5,13 +5,12 @@ import io
 # Sidebar navigation
 st.sidebar.markdown("## Table of Contents")
 st.sidebar.markdown("[VTT to Plain Text](#vtt-to-plain-text)")
-
+st.sidebar.markdown("[Video Transcription Checklist](#video-transcription-checklist)")
 """
 VTT to Plain Text
 =================
 """
 st.markdown('<div id="vtt-to-plain-text"></div>', unsafe_allow_html=True)
-st.header("VTT to Plain Text")
 
 st.markdown("""
             Please upload a VTT file to convert to a plain text file. The converted file will be available for download.
@@ -57,10 +56,16 @@ checklist_keys: list[str] = [
     "transcript_download_available"
 ]
 
-
+st.markdown('<div id="video-transcription-checklist"></div>', unsafe_allow_html=True)
 st.markdown("""
             Below is a rough checklist to make sure all videos are processed correctly for Canvas usage.
             """)
+
+# Add reset button
+if st.button("Reset Checklist"):
+    for key in checklist_keys:
+        st.session_state[key] = False
+    st.rerun()
 
 # Create the checklist
 st.checkbox("Video is processed on Vimeo",
