@@ -1,11 +1,13 @@
 import streamlit as st
 from vtt_to_transcript import vtt_to_plain_text
 import io
+import pyperclip
 
 # Sidebar navigation
 st.sidebar.markdown("## Table of Contents")
 st.sidebar.markdown("[VTT to Plain Text](#vtt-to-plain-text)")
 st.sidebar.markdown("[Video Transcription Checklist](#video-transcription-checklist)")
+st.sidebar.markdown("[player.vimeo Converter](#player-vimeo-converter)")
 """
 VTT to Plain Text
 =================
@@ -82,3 +84,40 @@ st.checkbox("Video is available for download",
             key="video_download_available")
 st.checkbox("Transcript is available for download",
             key="transcript_download_available")
+
+"""
+player.vimeo Converter
+===================================================
+"""
+
+st.markdown('<div id="vimeo-player-converter"></div>', unsafe_allow_html=True)
+
+st.markdown("""
+            Please enter a Vimeo video URL to convert to a `player.vimeo.com/video/<video_id>` URL.
+            """)
+
+# Create input field for Vimeo video URL
+vimeo_url = st.text_input("Enter a Vimeo video URL")
+
+# When there is an entry...
+if vimeo_url:
+    # Verify that the URL is a Vimeo URL
+    if not vimeo_url.startswith("https://vimeo.com/"):
+        st.error("Please enter a valid Vimeo URL.")
+    else:
+        try:
+            video_info = vimeo_url.split('/')[-1]
+            video_id = video_info.split('?')[0]
+            player_url = f"player.vimeo.com/video/{video_id}"
+            st.success(f"""
+                        Converted Vimeo URL: **{player_url}**\n
+                        Url is copied to your clipboard.
+                        """)
+
+            # Copy to clipboard
+            pyperclip.copy(player_url)
+        except Exception as e:
+            st.error(f"Please check the URL and try again.")
+
+
+
