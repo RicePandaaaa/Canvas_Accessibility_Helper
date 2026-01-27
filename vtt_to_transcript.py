@@ -1,44 +1,51 @@
-# Allow user to input file name
-file_name = input("Enter the file name: ")    
+# Look for files in the "transcripts_to_translate" directory
+import os
 
-# Open the file
-with open(file_name, 'r') as input_file:
-    # Skip the first 2 lines
-    next(input_file)
-    next(input_file)
 
-    # Split on blank lines (so \n\n)
-    chunks = input_file.read().split('\n\n')
-    
+for file_name in os.listdir("transcripts_to_translate"):
+    if file_name.endswith('.vtt'):
+        # Open the file
+        with open(os.path.join("transcripts_to_translate", file_name), 'r') as input_file:
+            # Skip the first 2 lines
+            next(input_file)
+            next(input_file)
 
-    # Only interested in the text, so for each chunk, first split on the newline
-    # then take the last element, which is the transcript text
-    transcript_text = [chunk.split('\n')[-1] for chunk in chunks]
-    
-    # Remove the "<v -> tag" from the transcript text
-    transcript_text = [text.replace('<v ->', '') for text in transcript_text]
-    
-    # String sentences together using punctuation marks
-    sentences = []
-    current_sentence = ""
-    sentence_punctuations = ['.', '!', '?']
+            # Read the file
+            file_content = input_file.read()
 
-    for text in transcript_text:
-        # Skip empty text
-        if not text:
-            continue
+            # Split on blank lines (so \n\n)
+            chunks = file_content.split('\n\n')
+            
 
-        # If ending punctuation is found, add the text to the end of the current sentence and add to the sentences list
-        if text[-1] in sentence_punctuations:
-            current_sentence += text + " "
-            sentences.append(current_sentence)
+            # Only interested in the text, so for each chunk, first split on the newline
+            # then take the last element, which is the transcript text
+            transcript_text = [chunk.split('\n')[-1] for chunk in chunks]
+            
+            # Remove the "<v -> tag" from the transcript text
+            transcript_text = [text.replace('<v ->', '') for text in transcript_text]
+            
+            # String sentences together using punctuation marks
+            sentences = []
             current_sentence = ""
-        else:
-            # Add the text with a space after for the next text
-            current_sentence += text + " "
+            sentence_punctuations = ['.', '!', '?']
 
-    # Create output file with sentences
-    new_file_name = "converted_" + file_name.split('.')[0] + ".txt"
+            for text in transcript_text:
+                # Skip empty text
+                if not text:
+                    continue
 
-    with open(new_file_name, 'w') as output_file:
-        output_file.writelines(sentences)
+                # If ending punctuation is found, add the text to the end of the current sentence and add to the sentences list
+                if text[-1] in sentence_punctuations:
+                    current_sentence += text + " "
+                    sentences.append(current_sentence)
+                    current_sentence = ""
+                else:
+                    # Add the text with a space after for the next text
+                    current_sentence += text + " "
+
+            # Create output file with sentences
+            new_file_name = "converted_" + file_name.split('.')[0] + ".txt"
+
+            # Place in finsihed_transcripts directory
+            with open(os.path.join("finished_transcripts", new_file_name), 'w') as output_file:
+                output_file.writelines(sentences)
