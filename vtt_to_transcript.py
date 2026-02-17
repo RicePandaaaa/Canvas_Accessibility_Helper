@@ -44,8 +44,8 @@ for file_name in os.listdir("transcripts_to_translate"):
                     current_sentence += text + " "
 
             # Create output file with sentences
-            new_file_name = "converted_" + file_name.split('.')[0] + ".txt"
+            new_file_name = "TEXTONLY_" + file_name.split('.')[0] + ".txt"
 
             # Place in finsihed_transcripts directory
-            with open(os.path.join("finished_transcripts", new_file_name), 'w') as output_file:
+            with open(os.path.join("text_only_finished_transcripts", new_file_name), 'w') as output_file:
                 output_file.writelines(sentences)
